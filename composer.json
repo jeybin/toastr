@@ -1,0 +1,29 @@
+{
+    "name": "jeybin/toastr",
+    "description": "Simple helper for php-flasher",
+    "require": {
+        "php-flasher/flasher-toastr-laravel": "^1.13"
+    },
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Jeybin\\Toastr\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "jeybin",
+            "email": "jeybin@gmail.com"
+        }
+    ],
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Jeybin\\Toastr\\Providers\\ToastrServiceProvider"
+            ],
+            "aliases": {
+                "Toastr": "Jeybin\\Toastr\\Facades\\ToastrFacades"
+            }
+        }
+    }
+}
