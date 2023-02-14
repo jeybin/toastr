@@ -13,22 +13,27 @@ To install Toastr for Laravel, simply run the following command:
 ```bash
   composer require jeybin/toastr
 ```
-After installing the package, the command php artisan toastr:install will auto run and publish all the configurations you can see the configuration file in config/jeybin-toastr.php 
+After installing the package, run the following command 
+
+```bash
+  php artisan toastr:install
+```
+ This will copy the configuration file to config/jeybin-toastr.php 
 
 
 ### Usage
-To use Laravel Toastr in your Laravel application, simply call the Toastr facade to display a notification:
+To use Laravel Toastr in your Laravel application, simply use  the Toastr facade Jeybin\Toastr\Toastr  to display a notification:
 
 ```php
-Toastr::success('Your message here')->toast();
+\Jeybin\Toastr\Toastr::success('Your message here')->toast();
 ```
 
 You can also use other notification types like error, warning, and info:
 
 ```php
-Toastr::error('Your error message here')->toast();
-Toastr::warning('Your warning message here')->toast();
-Toastr::info('Your info message here')->toast();
+\Jeybin\Toastr\Toastr::error('Your error message here')->toast();
+\Jeybin\Toastr\Toastr::warning('Your warning message here')->toast();
+\Jeybin\Toastr\Toastr::info('Your info message here')->toast();
 ```
 
 Another option is to redirect to a different page and display a notification there as well.
@@ -38,7 +43,7 @@ It will perform redirect()->back() with notification if it is empty or null.
 
 ```php
 
-  return Toastr::success('Hello world')->redirect($route);
+  return \Jeybin\Toastr\Toastr::success('Hello world')->redirect($route);
 
 ```
 
@@ -46,7 +51,7 @@ The config/jeybin-toastr.php file makes it simple to add or modify the redirecti
 
 ```php
 
-  return Toastr::success('Hello world')
+  return \Jeybin\Toastr\Toastr::success('Hello world')
                ->redirectStatusCode($statusCode)
                ->redirect($route);
 
@@ -90,7 +95,7 @@ return [
 Or you can change the configurations from by the time of function call itself :
 
 ```php 
-Toastr::success('message')
+\Jeybin\Toastr\Toastr::success('message')
       ->closeBtn(false)
       ->progressBar(false)
       ->preventDuplicates(false)
