@@ -19,6 +19,10 @@ return [
     /**
      * Prevent showing duplicate notifications
      */
-    'prevent_duplicates'=>true
+    'prevent_duplicates'=>true,
 
+    /**
+     * Redirect status code default : 302
+     */
+    'redirect_status_code'=>302
 ];

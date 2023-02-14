@@ -1,5 +1,5 @@
 
-# Toastr for Laravel
+# Toastr Notifications for Laravel
 
 Toastr for Laravel is a wrapper around the popular php-flasher  library, providing an easy-to-use interface for displaying notifications in your Laravel application. It includes a service provider, a facade, and a helper function to make it easy to use Toastr in your views and controllers.With Laravel Toastr, you can easily display toast messages on your website with minimal configuration.
 
@@ -13,26 +13,8 @@ To install Toastr for Laravel, simply run the following command:
 ```bash
   composer require jeybin/toastr
 ```
-After installing the package, you need to add the service provider and facade to your config/app.php file:
+After installing the package, the command php artisan toastr:install will auto run and publish all the configurations you can see the configuration file in config/jeybin-toastr.php 
 
-```php
-'providers' => [
-    // ...
-    Jeybin\Toastr\ToastrServiceProvider::class,
-],
-
-'aliases' => [
-    // ...
-    'Toastr' => Jeybin\Toastr\Facades\Toastr::class,
-],
-
-```
-
-Finally, you need to publish the configuration file:
-
-```php
-php artisan vendor:publish --provider="Jeybin\Toastr\ToastrServiceProvider" --tag="config"
-```
 
 ### Usage
 To use Laravel Toastr in your Laravel application, simply call the Toastr facade to display a notification:
@@ -49,8 +31,29 @@ Toastr::warning('Your warning message here')->toast();
 Toastr::info('Your info message here')->toast();
 ```
 
+Another option is to redirect to a different page and display a notification there as well.
+
+The $route variable can either be a whole url, a named route, or empty/null.
+It will perform redirect()->back() with notification if it is empty or null. 
+
+```php
+
+  return Toastr::success('Hello world')->redirect($route);
+
+```
+
+The config/jeybin-toastr.php file makes it simple to add or modify the redirection status code. Alternatively, you may supply the status code by using the syntax shown below: $statusCode must be an integer; the default value is 302. 
+
+```php
+
+  return Toastr::success('Hello world')
+               ->redirectStatusCode($statusCode)
+               ->redirect($route);
+
+```
+
 ### Customization
-Laravel Toastr supports customization of the notification style, position, animation, and more. The configurations can be changed from the config/toastr-config.php
+Laravel Toastr supports customization of the notification style, position, animation, and more. The configurations can be changed from the config/jeybin-toastr.php
 
 ```php
 
@@ -73,7 +76,12 @@ return [
     /**
      * Prevent showing duplicate notifications
      */
-    'prevent_duplicates'=>true
+    'prevent_duplicates'=>true,
+
+    /**
+     * Redirect status code default : 302
+     */
+    'redirect_status_code'=>302
 
 ];
 
@@ -96,6 +104,8 @@ Toastr::success('message')
 * preventDuplicates(boolean)  - Default : true
 * rtl(boolean)  - Default : false
 * timeOut(integer)  - Default : 1000
+* redirectStatusCode(integer) - default : 302 
+  use if you are using the redirect function
 
 ### Features
 

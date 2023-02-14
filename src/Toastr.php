@@ -2,36 +2,47 @@
 namespace Jeybin\Toastr;
 
 use Exception;
-use Illuminate\Http\Exceptions\HttpResponseException;
-use Jeybin\Toastr\Services\StatusCodeService;
+use Illuminate\Support\Facades\Route;
 
 final class Toastr{
     
 
-    public string $success;
+    protected string $success;
 
-    public string $error;
+    protected string $error;
 
-    public string $warning;
+    protected string $warning;
 
-    public string $info;
+    protected string $info;
 
-    public bool $rtl = false;
+    protected bool $rtl = false;
 
-    public bool $closeBtn;
+    protected bool $closeBtn;
     
-    public bool $preventDuplicates;
+    protected bool $preventDuplicates;
 
-    public bool $progressBar;
+    protected bool $progressBar;
 
-    public int $timeOut = 1000;
+    protected int $timeOut = 1000;
 
+
+    /**
+     * @var integer
+     * 
+     * The HTTP response status code 302 Found is a common way of 
+     * performing URL redirection. 
+     * The HTTP/1.0 specification (RFC 1945) initially defined this code, 
+     * and gave it the description phrase 
+     * "Moved Temporarily" rather than "Found".
+     */ 
+    public int $redirectStatusCode = 302;
 
     public function __construct(){
         $this->timeOut = config('toastr-config.timeout');
         $this->closeBtn = config('toastr-config.show_close_btn');
         $this->progressBar = config('toastr-config.show_progress_bar');
         $this->preventDuplicates = config('toastr-config.prevent_duplicates');
+        $this->redirectStatusCode = config('toastr-config.redirect_status_code');
     }
 
     public static function success(string $success='Success'){
@@ -106,10 +117,51 @@ final class Toastr{
             $toastr->addInfo($this->info);
         }
 
+        return $this;
+
     }
 
     public function toast(){
+        return $this->notify();
+    }
+
+    public function redirectStatusCode(int $statusCode){
+        $this->redirectStatusCode = $statusCode;
+        return $this;
+    }
+
+    public function redirect(string $route=''){
+ 
+        /**
+         * Generating the notifications
+         */
         $this->notify();
+
+        /**
+         * If not empty route will check 
+         * if the string passed is a valid url or not
+         * if it is valid url will redirect to that one
+         * else will take the previous url from the 
+         * route and redirect to that one
+         * 
+         */
+        $redirectUrl = (!empty($route))
+                                ? ((filter_var($route, FILTER_VALIDATE_URL)) 
+                                        ? $route 
+                                        : (Route::has($route) 
+                                            ? route($route) 
+                                            : (url()->previous())))
+                                : (url()->previous());
+
+
+        /**
+         * Redirecting to the specified url
+         */
+        if(!empty($redirectUrl)){
+            return redirect()->to($redirectUrl,$this->redirectStatusCode);
+        }
+
+        return $this;
     }
 
 
